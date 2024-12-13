@@ -80,7 +80,7 @@ print(f"Quantidade de clientes Pro: {len(clientes)}")
 
 for client in clientes:
     input_xpath = "/html/body/div[1]/div[3]/div/div/main/div/div[2]/div/div/div/div/div[2]/div/div[1]/div/div/div[1]/input"
-    search_elem = WebDriverWait(driver, 10).until(
+    search_elem = WebDriverWait(driver, 20).until(
         EC.element_to_be_clickable((By.XPATH, input_xpath))
     )
     # client = "Carlos Lapa"
@@ -89,7 +89,7 @@ for client in clientes:
     time.sleep(2)
 
     # find the right client
-    rows = WebDriverWait(driver, 10).until(
+    rows = WebDriverWait(driver, 20).until(
         EC.presence_of_all_elements_located((By.XPATH, "//table/tbody/tr"))
     )
     time.sleep(2)
@@ -98,7 +98,7 @@ for client in clientes:
     found = False
     for row in rows:
         # Get the list of <td> elements in the row
-        cells = WebDriverWait(driver, 10).until(
+        cells = WebDriverWait(driver, 20).until(
             lambda d: row.find_elements(By.TAG_NAME, "td")
         )
         # cells = WebDriverWait(driver, 10).until(
@@ -106,7 +106,8 @@ for client in clientes:
         # )
         # Check if any of the cells contain the client name
         for cell in cells:
-            if client in cell.text:
+            if client.strip() == cell.text:
+                # print(f"cell.text: {cell.text}")
                 # If the client name is found, click the row or perform the desired action
                 row.click()  # Or cell.click() if clicking the cell is needed
                 print(f"Clicked on row with client: {client}")
@@ -116,7 +117,7 @@ for client in clientes:
             break
 
     if not found:
-        print("Cliente {client} não foi encontrado")
+        print(f"Cliente {client} não foi encontrado")
         continue
 
     # look for the one with same client name
